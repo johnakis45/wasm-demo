@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wasm Add Demo</title>
+</head>
+<body>
+  <h1>WASM Add Demo</h1>
+
+  <input type="number" id="num1" placeholder="Enter first number">
+  <input type="number" id="num2" placeholder="Enter second number">
+  <button onclick="runAdd()">Add</button>
+
+  <p id="result"></p>
+
+  <script src="main.js"></script>
+  <script>
+    // Wait for WebAssembly module to load
+    Module.onRuntimeInitialized = () => {
+      window.runAdd = () => {
+        const a = parseInt(document.getElementById('num1').value, 10);
+        const b = parseInt(document.getElementById('num2').value, 10);
+
+        const result = Module.ccall(
+          'add',        // C++ function name
+          'number',     // return type
+          ['number', 'number'], // argument types
+          [a, b]        // arguments
+        );
+
+        document.getElementById('result').textContent = `Result: ${result}`;
+      };
+    };
+  </script>
+</body>
+</html>
